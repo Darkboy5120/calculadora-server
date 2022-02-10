@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 app.use(helmet());
-const port = 3001;
+const port = process.env.PORT || 3001;
 let response;
 
 const createResponse = (code, data, log) => {
