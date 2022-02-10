@@ -54,7 +54,8 @@ app.post('/apis', (req, res) => {
       response = ifTwoValuesExist(req, division);
       break;
     default:
-      response = createResponse(-1, null, 'That api does\'nt exits');
+      // response = createResponse(-1, null, 'That api does\'nt exits');
+      response = res.query.body;
   }
   res.send(response);
 });
