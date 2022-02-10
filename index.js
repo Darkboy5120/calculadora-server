@@ -42,6 +42,9 @@ const ifTwoValuesExist = (req, operation, res) => {
 }
 
 app.post('/apis',(req, res) => {
+  if (!req.body.api) {
+    return res.status(404).send(createResponse(404, null, 'That api doesn\'t exists'));
+  }
   switch (req.body.api) {
     case 'suma':
       response = ifTwoValuesExist(req, suma, res);
@@ -56,7 +59,7 @@ app.post('/apis',(req, res) => {
       response = ifTwoValuesExist(req, division, res);
       break;
     default:
-      response = createResponse(404, null, 'That api does\'nt exits');
+      return createResponse(404, null, 'That api does\'nt exits');
   }
 });
 
