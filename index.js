@@ -3,6 +3,8 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const app = express();
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet());
 const port = process.env.PORT || 3001;
@@ -28,37 +30,34 @@ const division = (val1, val2) => {
   return val1 / val2;
 };
 
-const ifTwoValuesExist = (req, operation) => {
+const ifTwoValuesExist = (req, operation, res) => {
   if(Math.random() < 0.5)
-    throw new Error("Fail");
-  if (req.query.val1 && req.query.val2) {
-    const result = operation(parseInt(req.query.val1), parseInt(req.query.val2));
-    return createResponse(0, result, 'OK');
+    return res.status(404).send(createResponse(404, null, 'Not found'));
+  if (req.body.val1 && req.body.val2) {
+    const result = operation(parseInt(req.body.val1), parseInt(req.body.val2));
+    return res.json(createResponse(0, result, 'OK'));
   } else {
-    return createResponse(-2, null, 'Lack of two values');
+    return createResponse(404, null, 'Lack of two values');
   }
 }
 
-app.post('/apis', (req, res) => {
-  console.log(req.body);
-  switch (req.query.api) {
+app.post('/apis',(req, res) => {
+  switch (req.body.api) {
     case 'suma':
-      response = ifTwoValuesExist(req, suma);
+      response = ifTwoValuesExist(req, suma, res);
       break;
     case 'resta':
-      response = ifTwoValuesExist(req, resta);
+      response = ifTwoValuesExist(req, resta, res);
       break;
     case 'multiplicacion':
-      response = ifTwoValuesExist(req, multiplicacion);
+      response = ifTwoValuesExist(req, multiplicacion, res);
       break;
     case 'division':
-      response = ifTwoValuesExist(req, division);
+      response = ifTwoValuesExist(req, division, res);
       break;
     default:
-      // response = createResponse(-1, null, 'That api does\'nt exits');
-      response = req.body;
+      response = createResponse(404, null, 'That api does\'nt exits');
   }
-  res.send(response);
 });
 
 app.listen(port, () => {
