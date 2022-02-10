@@ -40,6 +40,7 @@ const ifTwoValuesExist = (req, operation) => {
 }
 
 app.post('/apis', (req, res) => {
+  console.log(req.body);
   switch (req.query.api) {
     case 'suma':
       response = ifTwoValuesExist(req, suma);
@@ -55,7 +56,7 @@ app.post('/apis', (req, res) => {
       break;
     default:
       // response = createResponse(-1, null, 'That api does\'nt exits');
-      response = res.query.body;
+      response = req.body;
   }
   res.send(response);
 });
