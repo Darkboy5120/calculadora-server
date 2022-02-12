@@ -31,16 +31,17 @@ const division = (val1, val2) => {
 };
 
 const ifTwoValuesExist = (req, operation, res) => {
-  if(Math.random() < 0.3)
-    return res.status(404).send({
-      message: "Error handling",
-    });
+  if(Math.random() < 1)
+    // return res.status(404).send({
+    //   message: "Error handling",
+    // });
+    throw res;
   if (req.body.val1 && req.body.val2) {
     const result = operation(parseInt(req.body.val1), parseInt(req.body.val2));
-    return res.json(createResponse(0, result, 'OK'));
+    return res.json(createResponse(204, result, 'OK'));
   } else {
     return res.status(404).send({
-      message: "Lack of two values",
+      data: "Lack of two values",
     });
   }
 }
@@ -48,7 +49,7 @@ const ifTwoValuesExist = (req, operation, res) => {
 app.post('/apis',(req, res) => {
   if (!req.body.api) {
     return res.status(404).send({
-      message: "That api doesn\'t exists",
+      data: "That api doesn\'t exists",
     });
   }
   switch (req.body.api) {
