@@ -31,7 +31,7 @@ const division = (val1, val2) => {
 };
 
 const ifTwoValuesExist = (req, operation, res) => {
-  if(Math.random() < 1)
+  if(Math.random() < 0.2)
     // return res.status(404).send({
     //   message: "Error handling",
     // });
