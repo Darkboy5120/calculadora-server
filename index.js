@@ -31,19 +31,25 @@ const division = (val1, val2) => {
 };
 
 const ifTwoValuesExist = (req, operation, res) => {
-  if(Math.random() < 0.5)
-    return res.status(404).send(createResponse(404, null, 'Not found'));
+  if(Math.random() < 0.3)
+    return res.status(404).send({
+      message: "Error handling",
+    });
   if (req.body.val1 && req.body.val2) {
     const result = operation(parseInt(req.body.val1), parseInt(req.body.val2));
     return res.json(createResponse(0, result, 'OK'));
   } else {
-    return createResponse(404, null, 'Lack of two values');
+    return res.status(404).send({
+      message: "Lack of two values",
+    });
   }
 }
 
 app.post('/apis',(req, res) => {
   if (!req.body.api) {
-    return res.status(404).send(createResponse(404, null, 'That api doesn\'t exists'));
+    return res.status(404).send({
+      message: "That api doesn\'t exists",
+    });
   }
   switch (req.body.api) {
     case 'suma':
@@ -59,7 +65,9 @@ app.post('/apis',(req, res) => {
       response = ifTwoValuesExist(req, division, res);
       break;
     default:
-      return createResponse(404, null, 'That api does\'nt exits');
+      return res.status(404).send({
+        message: "That api doesn\'t exists",
+      });
   }
 });
 
