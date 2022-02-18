@@ -32,9 +32,6 @@ const division = (val1, val2) => {
 
 const ifTwoValuesExist = (req, operation, res) => {
   if(Math.random() < 0.2)
-    // return res.status(404).send({
-    //   message: "Error handling",
-    // });
     throw res;
   if (req.body.val1 && req.body.val2) {
     const result = operation(parseInt(req.body.val1), parseInt(req.body.val2));
@@ -44,6 +41,11 @@ const ifTwoValuesExist = (req, operation, res) => {
       data: "Lack of two values",
     });
   }
+}
+
+const getRandomColor = (res) => {
+  const result = "#" + Math.floor(Math.random()*16777215).toString(16);
+  return res.json(createResponse(204, result, 'OK'));
 }
 
 app.post('/apis',(req, res) => {
@@ -64,6 +66,9 @@ app.post('/apis',(req, res) => {
       break;
     case 'division':
       response = ifTwoValuesExist(req, division, res);
+      break;
+    case 'color':
+      response = getRandomColor(res);
       break;
     default:
       return res.status(404).send({
