@@ -2,10 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Club react</title>
+  <style>
+th, td {
+  border: 1px solid #000;
+}
+table {
+  text-align: left;
+}
+  </style>
 </head>
 <body>
   <h1>Bad use of the api</h1>
   <p>Refer to /apis and send post</p>
+  <table>
+    <tr>
+      <th>field</th>
+      <th>type</th>
+    </tr>
+    <tr>
+      <td>accountNumber</td>
+      <td>number</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td>age</td>
+      <td>number</td>
+    </tr>
+  </table>
+  <a href="/apis">Click here to copy the url</a>
+<script>
+  document.getElementsByTagName("a")[0].addEventListener("click", event => {
+      event.preventDefault();
+      navigator.clipboard.writeText(window.location.href + "apis")
+        .then(() => console.log("copiado"))
+    })
+</script>
 </body>
 </html>

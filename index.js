@@ -10,15 +10,23 @@ MongoClient.connect(mongoDb, (err, client) => {
   if (err) return console.error(err)
   console.log("Connected!")
   const db = client.db("club-react");
+
   app.post("/alumns", (req, res) => {
     const alumnsCollection = db.collection("alumns");
-    if (!req.body.accountNumber) {
+    if (req.body.accountNumber && req.body.name && req.body.age && Object.keys(req.body).length == 3) {
+      alumnsCollection.find({accountNumber: req.body.accountNumber}).toArray()
+        .then(results => {
+          if (results.length >= 1)
+            return res.status(405).send({data: "Account number exists"})
+          else
+            alumnsCollection.insertOne(req.body)
+              .then(() => res.json(createResponse(204, {}, 'OK')))
+        })
+    } else {
       return res.status(405).send({
-        data: "Account number not provided",
+        data: "Required fields not provided",
       });
-    }
-    alumnsCollection.insertOne(req.body)
-        .then(res.json(createResponse(204, result, 'OK')))
+    };
   })
 });
 
@@ -26,7 +34,7 @@ const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(helmet());
+app.use(helmet({contentSecurityPolicy: false}));
 const port = process.env.PORT || 3001;
 
 const createResponse = (code, data, log) => {
