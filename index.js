@@ -1,6 +1,26 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const MongoClient = require('mongodb').MongoClient
+require('dotenv').config();
+
+const mongoDb = "mongodb+srv://namoku:" + process.env.DB_PASSWORD + "@club-react.5reqp.mongodb.net/alumns?retryWrites=true&w=majority";
+
+MongoClient.connect(mongoDb, (err, client) => {
+  if (err) return console.error(err)
+  console.log("Connected!")
+  const db = client.db("club-react");
+  app.post("/alumns", (req, res) => {
+    const alumnsCollection = db.collection("alumns");
+    if (!req.body.accountNumber) {
+      return res.status(405).send({
+        data: "Account number not provided",
+      });
+    }
+    alumnsCollection.insertOne(req.body)
+        .then(res.json(createResponse(204, result, 'OK')))
+  })
+});
 
 const app = express();
 app.use(express.json())
@@ -8,7 +28,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet());
 const port = process.env.PORT || 3001;
-let response;
 
 const createResponse = (code, data, log) => {
   return {code, data, log};
