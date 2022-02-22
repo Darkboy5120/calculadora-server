@@ -11,7 +11,7 @@ MongoClient.connect(mongoDb, (err, client) => {
   console.log("Connected!")
   const db = client.db("club-react");
 
-  app.post("/alumns", (req, res) => {
+  app.post("/states-control", (req, res) => {
     const alumnsCollection = db.collection("alumns");
     if (req.body.accountNumber && req.body.name && req.body.age && Object.keys(req.body).length == 3) {
       alumnsCollection.find({accountNumber: req.body.accountNumber}).toArray()
