@@ -67,9 +67,9 @@ MongoClient.connect(mongoDb, (err, client) => {
         .then(result => {
           if(result.matchedCount == 0)
             return res.status(404).send({data: "Not found"})
-          return res.status(204).send({data: "Ok"})
+          return res.status(202).send({data: "Ok"})
         })
-        .catch(error => res.status(404).send(error))
+        .catch(error => res.status(404).json(error))
     } else
       return res.status(405).send({
         data: "Required fields not provided"
