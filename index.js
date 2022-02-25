@@ -37,13 +37,19 @@ MongoClient.connect(mongoDb, (err, client) => {
   });
 
   app.get("/alumns", (req, res) => {
-    alumnsCollection.find({accountNumber: parseInt(req.query.accountNumber)}).toArray()
-      .then(results => {
-        if (results.length >= 1)
-          return res.status(202).send(results[0]);
-        else
-          return res.status(404).send({data: "Not found"})
-      })
+    if (req.query.accountNumber)
+      alumnsCollection.find({accountNumber: parseInt(req.query.accountNumber)}).toArray()
+        .then(results => {
+          if (results.length >= 1)
+            return res.status(202).send(results[0]);
+          else
+            return res.status(404).send({data: "Not found"})
+        });
+    else
+      alumnsCollection.find().toArray()
+        .then(results => {
+          return res.status(202).send(results);
+        })
   });
 
   app.put("/alumns", (req, res) => {
